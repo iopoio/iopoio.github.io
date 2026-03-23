@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>채영화 — Product Planner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Pretendard:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #F5F2EC;
+  --ink: #1A1814;
+  --ink-muted: #6B6760;
+  --accent: #2D5A3D;
+  --accent-light: #E8F0EA;
+  --warm: #C4622D;
+  --border: #D9D4CA;
+  --card: #FDFBF8;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Pretendard', sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  font-size: 16px;
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+/* ── NOISE TEXTURE OVERLAY ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 999;
+  opacity: 0.5;
+}
+
+/* ── NAV ── */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.2rem 4rem;
+  background: rgba(245,242,236,0.88);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+
+.nav-logo {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.1rem;
+  letter-spacing: 0.02em;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.nav-links {
+  display: flex;
+  gap: 2.5rem;
+  list-style: none;
+}
+
+.nav-links a {
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--accent); }
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 0 4rem;
+  align-items: center;
+  gap: 4rem;
+  padding-top: 80px;
+}
+
+.hero-left {
+  padding-right: 2rem;
+}
+
+.hero-eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+.hero-eyebrow::before {
+  content: '';
+  display: block;
+  width: 2rem;
+  height: 1px;
+  background: var(--accent);
+}
+
+.hero-name {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(3.5rem, 7vw, 6rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin-bottom: 0.5rem;
+}
+
+.hero-name em {
+  font-style: italic;
+  color: var(--accent);
+}
+
+.hero-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(1.1rem, 2.5vw, 1.6rem);
+  color: var(--ink-muted);
+  margin-bottom: 2rem;
+  font-style: italic;
+}
+
+.hero-philosophy {
+  font-size: 0.95rem;
+  line-height: 1.9;
+  color: var(--ink-muted);
+  border-left: 2px solid var(--accent);
+  padding-left: 1.2rem;
+  margin-bottom: 2.5rem;
+  max-width: 460px;
+}
+
+.hero-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.75rem 1.8rem;
+  background: var(--ink);
+  color: var(--bg);
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: background 0.2s, transform 0.2s;
+}
+.hero-cta:hover { background: var(--accent); transform: translateY(-2px); }
+
+.hero-right {
+  position: relative;
+}
+
+.hero-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5px;
+  background: var(--border);
+  border: 1.5px solid var(--border);
+}
+
+.stat-card {
+  background: var(--card);
+  padding: 2rem 1.8rem;
+}
+
+.stat-number {
+  font-family: 'DM Serif Display', serif;
+  font-size: 2.8rem;
+  line-height: 1;
+  color: var(--ink);
+  margin-bottom: 0.4rem;
+}
+
+.stat-number span {
+  color: var(--accent);
+}
+
+.stat-label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: var(--ink-muted);
+  text-transform: uppercase;
+}
+
+/* ── SECTION COMMON ── */
+section {
+  padding: 7rem 4rem;
+}
+
+.section-header {
+  display: flex;
+  align-items: baseline;
+  gap: 1.5rem;
+  margin-bottom: 4rem;
+}
+
+.section-num {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--accent);
+  letter-spacing: 0.15em;
+}
+
+.section-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1.1;
+  color: var(--ink);
+}
+
+/* ── ABOUT ── */
+.about {
+  background: var(--ink);
+  color: var(--bg);
+}
+
+.about .section-title { color: var(--bg); }
+.about .section-num { color: #8BAD95; }
+
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5rem;
+  align-items: start;
+}
+
+.about-text p {
+  font-size: 1.05rem;
+  line-height: 1.9;
+  color: rgba(245,242,236,0.75);
+  margin-bottom: 1.2rem;
+}
+
+.about-text strong {
+  color: var(--bg);
+  font-weight: 500;
+}
+
+.philosophy-block {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.12);
+  padding: 2.5rem;
+}
+
+.philosophy-block .quote {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.3rem;
+  font-style: italic;
+  color: #8BAD95;
+  line-height: 1.5;
+  margin-bottom: 1.5rem;
+}
+
+.philosophy-block p {
+  font-size: 0.9rem;
+  color: rgba(245,242,236,0.6);
+  line-height: 1.8;
+}
+
+.skills-grid {
+  margin-top: 3rem;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.skill-group h4 {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #8BAD95;
+  margin-bottom: 0.6rem;
+}
+
+.skill-group p {
+  font-size: 0.8rem;
+  color: rgba(245,242,236,0.55);
+  line-height: 1.7;
+}
+
+/* ── FRAMEWORK ── */
+.framework {
+  background: var(--accent-light);
+}
+
+.framework-desc {
+  max-width: 560px;
+  font-size: 0.95rem;
+  color: var(--ink-muted);
+  line-height: 1.8;
+  margin-bottom: 4rem;
+}
+
+.steps-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5px;
+  background: var(--border);
+  border: 1.5px solid var(--border);
+  margin-bottom: 3rem;
+}
+
+.step-card {
+  background: var(--card);
+  padding: 2.2rem 2rem;
+  position: relative;
+  transition: background 0.2s;
+}
+.step-card:hover { background: white; }
+
+.step-num {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  color: var(--accent);
+  margin-bottom: 1rem;
+}
+
+.step-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.15rem;
+  color: var(--ink);
+  margin-bottom: 0.6rem;
+}
+
+.step-desc {
+  font-size: 0.82rem;
+  color: var(--ink-muted);
+  line-height: 1.7;
+}
+
+.framework-principles {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.principle {
+  padding: 1.5rem 1.8rem;
+  border: 1px solid var(--border);
+  background: var(--card);
+}
+
+.principle h4 {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--accent);
+  margin-bottom: 0.4rem;
+}
+
+.principle p {
+  font-size: 0.8rem;
+  color: var(--ink-muted);
+  line-height: 1.7;
+}
+
+/* ── WORK ── */
+.work { background: var(--bg); }
+
+.work-featured {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5px;
+  background: var(--border);
+  border: 1.5px solid var(--border);
+  margin-bottom: 1.5px;
+}
+
+.work-card {
+  background: var(--card);
+  padding: 3rem;
+  position: relative;
+  overflow: hidden;
+  transition: background 0.2s;
+  cursor: default;
+}
+.work-card:hover { background: white; }
+
+.work-card.large {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  align-items: start;
+}
+
+.work-tag {
+  display: inline-block;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.3rem 0.7rem;
+  background: var(--accent-light);
+  color: var(--accent);
+  margin-bottom: 1.2rem;
+}
+
+.work-company {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  color: var(--ink-muted);
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+
+.work-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.5rem;
+  line-height: 1.2;
+  color: var(--ink);
+  margin-bottom: 1rem;
+}
+
+.work-role {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--warm);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.8rem;
+}
+
+.work-desc {
+  font-size: 0.85rem;
+  color: var(--ink-muted);
+  line-height: 1.8;
+}
+
+.work-desc li {
+  margin-left: 1rem;
+  margin-bottom: 0.3rem;
+}
+
+.work-badge {
+  display: inline-block;
+  margin-top: 1.2rem;
+  padding: 0.3rem 0.8rem;
+  background: var(--ink);
+  color: var(--bg);
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+}
+
+.work-secondary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5px;
+  background: var(--border);
+  border: 1.5px solid var(--border);
+  border-top: none;
+}
+
+/* ── CAREER ── */
+.career { background: var(--bg); border-top: 1px solid var(--border); }
+
+.career-timeline {
+  position: relative;
+  padding-left: 2rem;
+}
+
+.career-timeline::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 1px;
+  background: var(--border);
+}
+
+.career-item {
+  position: relative;
+  padding: 0 0 3.5rem 3rem;
+}
+
+.career-item::before {
+  content: '';
+  position: absolute;
+  left: -0.3rem;
+  top: 0.5rem;
+  width: 0.55rem;
+  height: 0.55rem;
+  background: var(--accent);
+  border-radius: 50%;
+}
+
+.career-period {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  color: var(--ink-muted);
+  margin-bottom: 0.4rem;
+}
+
+.career-company {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.3rem;
+  color: var(--ink);
+  margin-bottom: 0.2rem;
+}
+
+.career-role-tag {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--accent);
+  background: var(--accent-light);
+  padding: 0.15rem 0.6rem;
+  margin-bottom: 0.7rem;
+}
+
+.career-detail {
+  font-size: 0.85rem;
+  color: var(--ink-muted);
+  line-height: 1.8;
+  max-width: 600px;
+}
+
+/* ── CONTACT ── */
+.contact {
+  background: var(--ink);
+  text-align: center;
+  padding: 8rem 4rem;
+}
+
+.contact .section-title {
+  color: var(--bg);
+  margin-bottom: 1.5rem;
+}
+
+.contact-sub {
+  font-size: 0.95rem;
+  color: rgba(245,242,236,0.5);
+  margin-bottom: 3rem;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.contact-links {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.contact-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.8rem 2rem;
+  border: 1px solid rgba(255,255,255,0.2);
+  color: var(--bg);
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: border-color 0.2s, background 0.2s;
+}
+.contact-link:hover {
+  border-color: #8BAD95;
+  background: rgba(139,173,149,0.1);
+}
+
+/* ── ANIMATIONS ── */
+.fade-up {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.fade-up.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (max-width: 900px) {
+  nav { padding: 1rem 1.5rem; }
+  .hero { grid-template-columns: 1fr; padding: 6rem 1.5rem 4rem; gap: 3rem; }
+  section { padding: 5rem 1.5rem; }
+  .about-grid { grid-template-columns: 1fr; gap: 3rem; }
+  .steps-grid { grid-template-columns: 1fr; }
+  .framework-principles { grid-template-columns: 1fr; }
+  .work-featured { grid-template-columns: 1fr; }
+  .work-card.large { grid-template-columns: 1fr; gap: 1.5rem; }
+  .work-secondary { grid-template-columns: 1fr; }
+  .hero-stats { grid-template-columns: 1fr 1fr; }
+  .skills-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">채영화</a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#framework">Framework</a></li>
+    <li><a href="#work">Work</a></li>
+    <li><a href="#career">Career</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left fade-up">
+    <div class="hero-eyebrow">Product Planner · 15yr+</div>
+    <h1 class="hero-name">채영화</h1>
+    <p class="hero-title">Simplifier & Problem Solver</p>
+    <p class="hero-philosophy">
+      기술은 사람을 편하게 하기 위해 존재한다고 믿습니다.<br>
+      그래서 항상 더 빠르고 쉬운 방법을 찾고,<br>
+      새로운 도구를 직접 써보는 사람입니다.
+    </p>
+    <a href="#work" class="hero-cta">Work 보기 →</a>
+  </div>
+  <div class="hero-right fade-up" style="transition-delay: 0.15s">
+    <div class="hero-stats">
+      <div class="stat-card">
+        <div class="stat-number">15<span>+</span></div>
+        <div class="stat-label">Years Experience</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">9<span>+</span></div>
+        <div class="stat-label">Industries</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">RFP<span>→</span></div>
+        <div class="stat-label">Proposal to Win</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">No<span>·</span>AI</div>
+        <div class="stat-label">Code & Tools</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="section-header fade-up">
+    <span class="section-num">01</span>
+    <h2 class="section-title">About me</h2>
+  </div>
+  <div class="about-grid">
+    <div class="about-text fade-up">
+      <p>의류학(디자인)을 전공하고 <strong>15년 이상</strong> IT 서비스 기획자 및 제품 담당자로 일하며, 게임·핀테크·엔터테인먼트·헬스케어 등 다양한 산업군에서 경험을 쌓았습니다.</p>
+      <p>가장 큰 강점은 <strong>'기획자의 논리'와 '디자이너의 감각'</strong>을 모두 갖췄다는 점입니다. 방대한 데이터와 텍스트 속에서 핵심 메시지를 도출하고, 전체적인 스토리 라인을 구성하여 도표로 구조화합니다.</p>
+      <p>수많은 경쟁 입찰과 임원 보고를 통해 다져진 <strong>제안서 작성 역량</strong>과, 노코드·AI 도구를 활용한 빠른 실행력을 바탕으로 비즈니스 커뮤니케이션의 효율을 높입니다.</p>
+      <div class="skills-grid">
+        <div class="skill-group">
+          <h4>기획 · 설계</h4>
+          <p>Figma, Notion, Jira, ClickUp</p>
+        </div>
+        <div class="skill-group">
+          <h4>노코드</h4>
+          <p>Webflow, Wordpress, Framer, FlutterFlow</p>
+        </div>
+        <div class="skill-group">
+          <h4>AI 도구</h4>
+          <p>Claude, ChatGPT, Perplexity, Gamma</p>
+        </div>
+        <div class="skill-group">
+          <h4>문서 · 보고</h4>
+          <p>PPT, Google Slides, Excel, Spreadsheet</p>
+        </div>
+      </div>
+    </div>
+    <div class="philosophy-block fade-up" style="transition-delay: 0.15s">
+      <p class="quote">"복잡함을 명료함으로 바꾸는 Simplifier"</p>
+      <p>비즈니스 현장에는 언제나 복잡한 데이터와 난해한 요구사항이 존재합니다. 저의 역할은 혼재된 정보 속에서 본질을 파악하여 군더더기를 걷어내고, 누구나 직관적으로 이해할 수 있는 가장 단순한 형태로 재설계하는 것입니다.</p>
+      <br>
+      <p>도구(Tool)에 얽매이지 않고 문제의 핵심을 꿰뚫는 통찰력을 바탕으로, 비즈니스의 복잡한 문제를 해결 가능한 상태로 변화시키는 '문제 해결의 조력자'가 되고자 합니다.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FRAMEWORK -->
+<section class="framework" id="framework">
+  <div class="section-header fade-up">
+    <span class="section-num">02</span>
+    <h2 class="section-title">나의 제안 프레임워크</h2>
+  </div>
+  <p class="framework-desc fade-up">
+    단순히 문서를 만드는 것이 아닙니다. RFP를 분석하고, 클라이언트의 언어로 전략을 설득력 있게 구조화하는 반복 검증된 방식입니다.
+  </p>
+
+  <!-- DIAGRAM -->
+  <div class="fade-up" style="margin-bottom: 3rem; background: var(--card); border: 1.5px solid var(--border); padding: 2.5rem 2rem;">
+    <svg width="100%" viewBox="0 0 860 300" xmlns="http://www.w3.org/2000/svg" style="font-family:'Pretendard',sans-serif; overflow:visible;">
+      <defs>
+        <marker id="fw-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+          <path d="M2 1L8 5L2 9" fill="none" stroke="#2D5A3D" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </marker>
+      </defs>
+
+      <!-- Step boxes top row: 01 02 03 -->
+      <!-- 01 현황 분석 -->
+      <rect x="20" y="40" width="130" height="64" rx="4" fill="#FDFBF8" stroke="#D9D4CA" stroke-width="1"/>
+      <text x="85" y="62" text-anchor="middle" font-size="9" fill="#6B6760" letter-spacing="1" font-weight="500">STEP 01</text>
+      <text x="85" y="82" text-anchor="middle" font-size="13" fill="#1A1814" font-weight="600">현황 분석</text>
+      <text x="85" y="97" text-anchor="middle" font-size="9" fill="#6B6760">클라이언트 문제 정의</text>
+
+      <!-- arrow 01→02 -->
+      <line x1="152" y1="72" x2="188" y2="72" stroke="#2D5A3D" stroke-width="1.2" marker-end="url(#fw-arrow)"/>
+
+      <!-- 02 벤치마킹 -->
+      <rect x="190" y="40" width="130" height="64" rx="4" fill="#FDFBF8" stroke="#D9D4CA" stroke-width="1"/>
+      <text x="255" y="62" text-anchor="middle" font-size="9" fill="#6B6760" letter-spacing="1" font-weight="500">STEP 02</text>
+      <text x="255" y="82" text-anchor="middle" font-size="13" fill="#1A1814" font-weight="600">시장 벤치마킹</text>
+      <text x="255" y="97" text-anchor="middle" font-size="9" fill="#6B6760">경쟁사 비교 및 기준 도출</text>
+
+      <!-- arrow 02→03 -->
+      <line x1="322" y1="72" x2="358" y2="72" stroke="#2D5A3D" stroke-width="1.2" marker-end="url(#fw-arrow)"/>
+
+      <!-- 03 핵심 메시지 -->
+      <rect x="360" y="40" width="140" height="64" rx="4" fill="#E8F0EA" stroke="#2D5A3D" stroke-width="1.2"/>
+      <text x="430" y="62" text-anchor="middle" font-size="9" fill="#2D5A3D" letter-spacing="1" font-weight="500">STEP 03</text>
+      <text x="430" y="82" text-anchor="middle" font-size="13" fill="#1A1814" font-weight="600">핵심 메시지 설정</text>
+      <text x="430" y="97" text-anchor="middle" font-size="9" fill="#2D5A3D">한 줄 방향성 압축</text>
+
+      <!-- down arrow from 03 -->
+      <line x1="430" y1="106" x2="430" y2="148" stroke="#2D5A3D" stroke-width="1.2" marker-end="url(#fw-arrow)"/>
+
+      <!-- 04 범위 정의 -->
+      <rect x="360" y="150" width="140" height="64" rx="4" fill="#E8F0EA" stroke="#2D5A3D" stroke-width="1.2"/>
+      <text x="430" y="172" text-anchor="middle" font-size="9" fill="#2D5A3D" letter-spacing="1" font-weight="500">STEP 04</text>
+      <text x="430" y="192" text-anchor="middle" font-size="13" fill="#1A1814" font-weight="600">제안 범위 정의</text>
+      <text x="430" y="207" text-anchor="middle" font-size="9" fill="#2D5A3D">무엇을 할지 시각화</text>
+
+      <!-- arrow 04→05 (left) -->
+      <line x1="358" y1="182" x2="322" y2="182" stroke="#2D5A3D" stroke-width="1.2" marker-end="url(#fw-arrow-left)"/>
+      <defs>
+        <marker id="fw-arrow-left" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M8 1L2 5L8 9" fill="none" stroke="#2D5A3D" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </marker>
+      </defs>
+      <line x1="358" y1="182" x2="322" y2="182" stroke="#2D5A3D" stroke-width="1.2" marker-end="url(#fw-arrow-rev)"/>
+      <defs>
+        <marker id="fw-arrow-rev" viewBox="0 0 10 10" refX="2" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+          <path d="M8 1L2 5L8 9" fill="none" stroke="#2D5A3D" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </marker>
+      </defs>
+
+      <!-- 05 시안 제시 -->
+      <rect x="190" y="150" width="130" height="64" rx="4" fill="#FDFBF8" stroke="#D9D4CA" stroke-width="1"/>
+      <text x="255" y="172" text-anchor="middle" font-size="9" fill="#6B6760" letter-spacing="1" font-weight="500">STEP 05</text>
+      <text x="255" y="192" text-anchor="middle" font-size="13" fill="#1A1814" font-weight="600">시안 직접 제시</text>
+      <text x="255" y="207" text-anchor="middle" font-size="9" fill="#6B6760">설명 말고 보여주기</text>
+
+      <!-- arrow 05→06 (left) -->
+      <line x1="188" y1="182" x2="152" y2="182" stroke="#2D5A3D" stroke-width="1.2" marker-end="url(#fw-arrow-rev)"/>
+
+      <!-- 06 실행 계획 -->
+      <rect x="20" y="150" width="130" height="64" rx="4" fill="#FDFBF8" stroke="#D9D4CA" stroke-width="1"/>
+      <text x="85" y="172" text-anchor="middle" font-size="9" fill="#6B6760" letter-spacing="1" font-weight="500">STEP 06</text>
+      <text x="85" y="192" text-anchor="middle" font-size="13" fill="#1A1814" font-weight="600">실행 계획 수립</text>
+      <text x="85" y="207" text-anchor="middle" font-size="9" fill="#6B6760">일정 · 조직 · 리스크</text>
+
+      <!-- down arrow from 06 -->
+      <line x1="85" y1="216" x2="85" y2="248" stroke="#2D5A3D" stroke-width="1.2" marker-end="url(#fw-arrow)"/>
+
+      <!-- Result box -->
+      <rect x="20" y="250" width="480" height="42" rx="4" fill="#2D5A3D" stroke="none"/>
+      <text x="260" y="268" text-anchor="middle" font-size="11" fill="white" font-weight="600" letter-spacing="0.5">수주</text>
+      <text x="260" y="284" text-anchor="middle" font-size="9" fill="rgba(255,255,255,0.7)">문서가 대신 설득한다</text>
+
+      <!-- Divider -->
+      <line x1="540" y1="30" x2="540" y2="300" stroke="#D9D4CA" stroke-width="1" stroke-dasharray="4 4"/>
+
+      <!-- Principles side -->
+      <text x="570" y="55" font-size="10" fill="#2D5A3D" font-weight="600" letter-spacing="1">핵심 원칙</text>
+
+      <rect x="560" y="70" width="280" height="52" rx="4" fill="#FDFBF8" stroke="#D9D4CA" stroke-width="1"/>
+      <text x="575" y="92" font-size="11" fill="#1A1814" font-weight="600">Why → What → How</text>
+      <text x="575" y="110" font-size="10" fill="#6B6760">문제 먼저, 해결 나중. 왜 필요한지를 먼저 납득시킨다.</text>
+
+      <rect x="560" y="132" width="280" height="52" rx="4" fill="#FDFBF8" stroke="#D9D4CA" stroke-width="1"/>
+      <text x="575" y="154" font-size="11" fill="#1A1814" font-weight="600">클라이언트 언어로 쓴다</text>
+      <text x="575" y="172" font-size="10" fill="#6B6760">기술 용어 최소화, 맥락과 비즈니스 언어 우선.</text>
+
+      <rect x="560" y="194" width="280" height="52" rx="4" fill="#FDFBF8" stroke="#D9D4CA" stroke-width="1"/>
+      <text x="575" y="216" font-size="11" fill="#1A1814" font-weight="600">시각이 먼저 설득한다</text>
+      <text x="575" y="234" font-size="10" fill="#6B6760">표·다이어그램·시안을 텍스트보다 앞에 배치한다.</text>
+
+      <!-- Label: 채영화의 제안 프레임워크 -->
+      <text x="260" y="22" text-anchor="middle" font-size="10" fill="#6B6760" letter-spacing="1">채영화의 제안서 작성 프레임워크</text>
+    </svg>
+  </div>
+
+  <div class="steps-grid fade-up">
+    <div class="step-card">
+      <div class="step-num">STEP 01</div>
+      <div class="step-title">현황 분석</div>
+      <div class="step-desc">클라이언트의 현재 상태를 직접 분해합니다. 문제점을 데이터와 시각 자료로 명확히 정의합니다.</div>
+    </div>
+    <div class="step-card">
+      <div class="step-num">STEP 02</div>
+      <div class="step-title">시장 벤치마킹</div>
+      <div class="step-desc">경쟁사 3개 이상을 직접 비교 분석하여 차별화 방향과 제안의 근거를 만듭니다.</div>
+    </div>
+    <div class="step-card">
+      <div class="step-num">STEP 03</div>
+      <div class="step-title">핵심 메시지 설정</div>
+      <div class="step-desc">모든 내용을 관통하는 한 줄의 방향성을 먼저 설정합니다. 그 이후 모든 슬라이드가 이 메시지를 향합니다.</div>
+    </div>
+    <div class="step-card">
+      <div class="step-num">STEP 04</div>
+      <div class="step-title">제안 범위 정의</div>
+      <div class="step-desc">무엇을 할지, 어디까지 할지를 다이어그램과 표로 시각화합니다. 모호함을 없앱니다.</div>
+    </div>
+    <div class="step-card">
+      <div class="step-num">STEP 05</div>
+      <div class="step-title">시안 직접 제시</div>
+      <div class="step-desc">설명하지 않고 보여줍니다. 실제 화면 시안, 프로토타입, 레이아웃을 먼저 제작합니다.</div>
+    </div>
+    <div class="step-card">
+      <div class="step-num">STEP 06</div>
+      <div class="step-title">실행 계획 수립</div>
+      <div class="step-desc">일정·조직·리스크까지 구체적으로 설계합니다. 수주 이후를 미리 보여주는 것이 신뢰를 만듭니다.</div>
+    </div>
+  </div>
+  <div class="framework-principles fade-up">
+    <div class="principle">
+      <h4>Why → What → How</h4>
+      <p>문제 먼저, 해결 나중. 왜 필요한지를 먼저 납득시킵니다.</p>
+    </div>
+    <div class="principle">
+      <h4>클라이언트 언어로</h4>
+      <p>기술 용어보다 클라이언트의 맥락과 언어로 작성합니다.</p>
+    </div>
+    <div class="principle">
+      <h4>시각이 먼저 설득한다</h4>
+      <p>표·다이어그램·시안을 텍스트보다 앞에 배치합니다.</p>
+    </div>
+  </div>
+</section>
+
+<!-- WORK -->
+<section class="work" id="work">
+  <div class="section-header fade-up">
+    <span class="section-num">03</span>
+    <h2 class="section-title">Selected Work</h2>
+  </div>
+
+  <!-- Featured: 롯데푸드 -->
+  <div class="work-featured fade-up">
+    <a href="lotte-food.html" style="text-decoration:none; color:inherit; display:block;">
+    <div class="work-card large" style="cursor:pointer;">
+      <div>
+        <div class="work-tag">제안서 · 수주</div>
+        <div class="work-company">Nextculture × Lotte Food</div>
+        <h3 class="work-title">롯데푸드 홈페이지 리뉴얼 제안서</h3>
+        <div class="work-role">Proposal Lead — 단독 작업, 수주 성공</div>
+        <span class="work-badge">★★★★★ 기여도</span>
+      </div>
+      <div>
+        <ul class="work-desc">
+          <li>RFP 분석부터 자료 조사, 전략 수립, 제안서 제작까지 혼자 진행</li>
+          <li>경쟁사(CJ제일제당·동원F&B·SPC) 벤치마킹을 통한 차별화 전략 수립</li>
+          <li>43페이지 제안서 — 현황 분석 → 시안 → 실행 계획까지 완결 구조</li>
+          <li>WBS 기반 단계별 추진 일정 및 리스크 관리 방안 설계</li>
+          <li>대표 발표로 최종 수주 달성</li>
+        </ul>
+        <div style="margin-top:1.5rem; font-size:0.78rem; color:var(--accent); font-weight:500;">케이스스터디 보기 →</div>
+      </div>
+    </div>
+    </a>
+  </div>
+
+  <!-- Secondary work -->
+  <div class="work-secondary fade-up">
+    <div class="work-card">
+      <div class="work-tag">UI/UX 기획</div>
+      <div class="work-company">Theethru × HYBE Ador</div>
+      <h3 class="work-title">NewJeans – ditto 홈페이지</h3>
+      <div class="work-role">UI/UX Planning & Documentation</div>
+      <ul class="work-desc">
+        <li>아티스트 컨셉 반영 인터랙션 기획</li>
+        <li>개발 커뮤니케이션용 상세 기능 명세서 작성</li>
+        <li>QA를 통한 기획-구현 오차 최소화</li>
+      </ul>
+    </div>
+    <div class="work-card">
+      <div class="work-tag">프로젝트 관리</div>
+      <div class="work-company">Theethru × HYBE Bighit</div>
+      <h3 class="work-title">BTS – PROOF 홈페이지</h3>
+      <div class="work-role">Project Scheduling & Coordination</div>
+      <ul class="work-desc">
+        <li>콘텐츠별/오픈일정별 복잡한 배포 계획 도식화</li>
+        <li>개발팀-아티스트 간 타임라인 수립 및 리스크 관리</li>
+        <li>런칭 시나리오 표준 문서화</li>
+      </ul>
+    </div>
+    <div class="work-card">
+      <div class="work-tag">신사업 기획</div>
+      <div class="work-company">Nextculture × Konaia</div>
+      <h3 class="work-title">가스 AMI 시스템 기획</h3>
+      <div class="work-role">Full Planning — 기획·디자인·프로토타입</div>
+      <ul class="work-desc">
+        <li>요구사항 명세서·기능정의서·서비스 정책서 작성</li>
+        <li>Figma 프로토타입 제작</li>
+        <li>IA 설계 및 서비스 플로우 정의</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- CAREER -->
+<section class="career" id="career">
+  <div class="section-header fade-up">
+    <span class="section-num">04</span>
+    <h2 class="section-title">Career</h2>
+  </div>
+  <div class="career-timeline">
+    <div class="career-item fade-up">
+      <div class="career-period">2022.07 — 2024.04</div>
+      <div class="career-company">Theethru (시스루)</div>
+      <span class="career-role-tag">웹/앱 기획</span>
+      <p class="career-detail">HYBE 소속 아티스트(BTS, NewJeans, LE SSERAFIM 등) 프로모션 웹 기획서 시각화 및 UI/UX 설계 전담. 기획서 작성, 아트디렉터 CC, 일정 관리, QA 진행.</p>
+    </div>
+    <div class="career-item fade-up">
+      <div class="career-period">2021.04 — 2021.12</div>
+      <div class="career-company">넥스트컬쳐</div>
+      <span class="career-role-tag">제안서 총괄 · PO</span>
+      <p class="career-detail">경쟁 입찰 제안서(RFP) 디자인 및 편집 총괄. 롯데푸드 수주, 가스 AMI 기획 및 프로토타입 제작. 신규 사업 피치덱 제작.</p>
+    </div>
+    <div class="career-item fade-up">
+      <div class="career-period">2018.10 — 2021.03</div>
+      <div class="career-company">글로벌모터서비스</div>
+      <span class="career-role-tag">전략기획팀 · 제안서</span>
+      <p class="career-detail">RFP 분석 및 제안서 작성. 고객사 프로젝트 관리(메르세데스벤츠, 아우디, BMW JAPAN 등). 고객사 정기 리포트 서식 표준화.</p>
+    </div>
+    <div class="career-item fade-up">
+      <div class="career-period">2015.05 — 2018.09</div>
+      <div class="career-company">롯데 PS Net</div>
+      <span class="career-role-tag">신사업개발</span>
+      <p class="career-detail">핀테크/금융 서비스(카카오뱅크, 부산은행 등) 제휴 제안서 작성. ATM 신규 서비스 출시 기획. 키오스크 UI 화면 흐름도 설계.</p>
+    </div>
+    <div class="career-item fade-up">
+      <div class="career-period">2009.01 — 2012.07</div>
+      <div class="career-company">넷마블 · SK Telecom</div>
+      <span class="career-role-tag">운영 기획 · BI 분석</span>
+      <p class="career-detail">서비스 운영 데이터(BI) 분석 및 시각화 리포트 작성. 운영 매뉴얼 및 가이드 문서화. SK T스토어 앱스토어 데이터 마이닝 및 분석.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="section-header fade-up" style="justify-content: center; margin-bottom: 0;">
+    <h2 class="section-title" style="font-size: clamp(2rem, 5vw, 3.5rem);">함께 일해요</h2>
+  </div>
+  <p class="contact-sub fade-up">문서 기획, 제안서 작성, 서비스 기획 등<br>어떤 이야기든 편하게 연락 주세요.</p>
+  <div class="contact-links fade-up">
+    <a href="mailto:chaejenn@gmail.com" class="contact-link">✉ chaejenn@gmail.com</a>
+    <a href="tel:01099718910" class="contact-link">☎ 010-9971-8910</a>
+    <a href="https://www.linkedin.com/in/chae00123/" target="_blank" class="contact-link">↗ LinkedIn</a>
+  </div>
+</section>
+
+<script>
+// Intersection Observer for fade-up animations
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(el => {
+    if (el.isIntersecting) {
+      el.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+// Stagger children in grids
+document.querySelectorAll('.steps-grid, .work-secondary, .hero-stats').forEach(grid => {
+  grid.querySelectorAll(':scope > *').forEach((child, i) => {
+    child.style.transitionDelay = (i * 0.08) + 's';
+  });
+});
+</script>
+</body>
+</html>
