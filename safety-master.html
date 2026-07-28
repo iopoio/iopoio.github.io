@@ -12,7 +12,7 @@
 </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>가스 AMI 시스템 기획 — 채영화</title>
+<title>안전명장 모바일 앱 개발 — 채영화</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Pretendard:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -394,36 +394,36 @@ nav {
 
 <div class="case-hero">
   <div class="fade-up">
-    <div class="case-eyebrow">Case Study · 신사업 기획</div>
-    <h1 class="case-title">가스 AMI<br>원격검침 관제 시스템</h1>
+    <div class="case-eyebrow">Case Study · 모바일 앱 기획</div>
+    <h1 class="case-title">안전명장<br>모바일 앱 개발</h1>
     <p class="case-summary">
-      코나아이의 가스 AMI(원격검침 인프라) 관제 시스템을 요구사항 정의부터 웹 개발, APP 프로토타입까지 확장한 프로젝트. 전문 용어가 많은 도메인을 문서와 정보구조로 표준화해 이해관계자 간 커뮤니케이션을 풀어냈습니다.
+      건설현장 등 산업 현장의 안전관리를 위한 모바일 앱. 근로자용 긴급 호출·위험성 평가 기능과 관리자용 현황 관리 기능을 분리 설계했습니다.
     </p>
   </div>
   <div class="case-meta fade-up" style="transition-delay:0.15s">
     <div class="meta-item">
       <div class="meta-label">클라이언트</div>
-      <div class="meta-value">코나아이</div>
+      <div class="meta-value">안전명장</div>
     </div>
     <div class="meta-item">
       <div class="meta-label">소속</div>
-      <div class="meta-value">넥스트컬쳐</div>
+      <div class="meta-value">시스루 (Theethru)</div>
     </div>
     <div class="meta-item">
       <div class="meta-label">기간</div>
-      <div class="meta-value">2021.05 — 2021.07</div>
+      <div class="meta-value">2022.03 — 2022.05</div>
     </div>
     <div class="meta-item">
       <div class="meta-label">역할</div>
-      <div class="meta-value">요구사항정의 · 기획 · 프로토타입</div>
+      <div class="meta-value">요구사항분석 · 플로우설계 · 앱기획</div>
     </div>
     <div class="meta-item">
       <div class="meta-label">기여도</div>
-      <div class="meta-value highlight">★★★★☆ (4/5)</div>
+      <div class="meta-value highlight">★★☆☆☆ (2/5)</div>
     </div>
     <div class="meta-item">
-      <div class="meta-label">범위</div>
-      <div class="meta-value highlight">1차 웹 → 2차 APP</div>
+      <div class="meta-label">구성</div>
+      <div class="meta-value highlight">근로자용 · 관리자용 앱</div>
     </div>
   </div>
 </div>
@@ -434,29 +434,28 @@ nav {
     <div class="case-section-label">01 · Problem</div>
     <h2>왜 이 프로젝트가 어려웠나</h2>
     <p>
-      가스 AMI(원격검침 인프라)는 계량기·통신모듈·검침주기 등 <strong>전문 용어가 많은 도메인</strong>입니다.
-      1차 웹 개발로 시작해 2차 APP 프로토타입까지 범위가 확장되는 과정에서, 서로 다른 배경의 이해관계자(고객사·개발팀·현장 관제 담당자)가 같은 용어를 다르게 이해하는 문제가 반복됐습니다.
+      산업 현장의 안전사고는 초 단위로 대응 속도가 갈리는 문제입니다. 근로자가 위험 상황에서 즉시 도움을 요청할 수 있어야 하고, 동시에 관리자는 현장의 위험성 평가·이력을 놓치지 않고 관리해야 했습니다. 두 사용자 그룹의 요구가 서로 다르다는 점이 설계의 핵심 난제였습니다.
     </p>
     <div class="problem-grid">
       <div class="problem-card">
         <div class="num">01</div>
-        <h4>도메인 용어 장벽</h4>
-        <p>계량기·통신모듈·검침주기 등 비전공자에게 낯선 전문 용어가 다수</p>
+        <h4>두 개의 전혀 다른 사용자</h4>
+        <p>근로자(현장)와 관리자(사무실)의 사용 맥락과 필요 기능이 완전히 다름</p>
       </div>
       <div class="problem-card">
         <div class="num">02</div>
-        <h4>지리정보 기반 관제</h4>
-        <p>전국 단위 가스 설치 현황을 지도 위에서 위험도별로 실시간 관제해야 함</p>
+        <h4>긴급 상황 대응 속도</h4>
+        <p>SOS 긴급 호출은 클릭 수를 최소화해야 실효성이 생김</p>
       </div>
       <div class="problem-card">
         <div class="num">03</div>
-        <h4>웹 → APP 확장</h4>
-        <p>1차 웹 개발 이후 2차 APP 프로토타입으로 범위가 넓어짐</p>
+        <h4>위험성 평가 이력 관리</h4>
+        <p>현장별 위험성 평가 등록·갱신·이력 추적이 누락되면 안 됨</p>
       </div>
       <div class="problem-card">
         <div class="num">04</div>
-        <h4>커뮤니케이션 기준 부재</h4>
-        <p>공통 용어·플로우 정의 없이는 요구사항이 이해관계자마다 다르게 해석됨</p>
+        <h4>현장 특성상 낮은 디지털 친숙도</h4>
+        <p>근로자 다수가 앱 사용에 익숙하지 않을 수 있음을 고려한 UX 필요</p>
       </div>
     </div>
   </div>
@@ -465,35 +464,35 @@ nav {
     <div class="case-section-label">02 · Approach</div>
     <h2>어떻게 풀었나</h2>
     <p>
-      용어가 어려운 서비스이기 때문에, 화면을 그리기 전에 <strong>문서로 용어와 플로우부터 표준화</strong>하는 것을 우선순위로 뒀습니다.
+      담당자 인터뷰를 통해 실제 현장의 업무 흐름부터 파악한 뒤, 근로자 앱과 관리자 앱을 완전히 분리된 플로우로 설계했습니다.
     </p>
     <div class="approach-steps">
       <div class="approach-step">
         <div class="approach-step-num">01</div>
         <div class="approach-step-content">
-          <h4>요구사항명세서 · 서비스정책서 작성</h4>
-          <p>도메인 용어를 정의하고 관제 정책(위험도 등급 기준 등)을 문서로 표준화</p>
+          <h4>담당자 인터뷰 기반 서비스 플로우 설계</h4>
+          <p>실제 현장 업무 절차를 청취해 근로자·관리자 각각의 시나리오 정의</p>
         </div>
       </div>
       <div class="approach-step">
         <div class="approach-step-num">02</div>
         <div class="approach-step-content">
-          <h4>IA(정보구조) 설계</h4>
-          <p>전체 화면과 데이터 흐름의 관계를 한 장의 구조도로 정리해 팀 전체가 공유</p>
+          <h4>근로자 앱 — SOS 최소 클릭 설계</h4>
+          <p>긴급 호출 버튼을 메인 화면에 배치, 원터치로 관리자에게 즉시 전달</p>
         </div>
       </div>
       <div class="approach-step">
         <div class="approach-step-num">03</div>
         <div class="approach-step-content">
-          <h4>GIS 지도 기반 관제 화면 기획</h4>
-          <p>설치 현황·위험도(안전/주의/경계/위험)를 지도 위에 색상으로 시각화</p>
+          <h4>관리자 앱 — 위험성 평가 관리 플로우</h4>
+          <p>평가 등록·검토·승인 단계를 구조화해 이력 누락 방지</p>
         </div>
       </div>
       <div class="approach-step">
         <div class="approach-step-num">04</div>
         <div class="approach-step-content">
-          <h4>Figma 프로토타입 제작</h4>
-          <p>2차 APP 범위까지 실제 클릭 가능한 프로토타입으로 확장 제작</p>
+          <h4>UX 시나리오 및 인터랙션 정의</h4>
+          <p>두 앱의 화면 흐름과 상호작용을 기획서로 문서화</p>
         </div>
       </div>
     </div>
@@ -504,28 +503,24 @@ nav {
     <h2>결과와 배운 것</h2>
     <div class="outcome-grid">
       <div class="outcome-card">
-        <div class="big">4/5</div>
+        <div class="big">2</div>
+        <h4>분리 설계</h4>
+        <p>근로자용·관리자용 앱을 사용자 맥락에 맞게 완전히 분리 기획</p>
+      </div>
+      <div class="outcome-card">
+        <div class="big">SOS</div>
+        <h4>긴급 호출</h4>
+        <p>원터치 긴급 호출로 현장 대응 속도 개선 설계</p>
+      </div>
+      <div class="outcome-card">
+        <div class="big">2/5</div>
         <h4>기여도</h4>
-        <p>요구사항명세·기능정의·서비스정책서·프로토타입까지 전 과정 수행</p>
-      </div>
-      <div class="outcome-card">
-        <div class="big">1→2</div>
-        <h4>웹 → APP</h4>
-        <p>1차 웹 개발에서 2차 APP 프로토타입으로 범위 확장</p>
-      </div>
-      <div class="outcome-card">
-        <div class="big">GIS</div>
-        <h4>지도 기반 관제</h4>
-        <p>위험도 등급을 색상으로 구분한 실시간 관제 대시보드 기획</p>
+        <p>요구사항분석·플로우설계·앱기획 담당</p>
       </div>
     </div>
     <div class="retro-block">
-      <p>
-        용어가 어려운 서비스였기 때문에, <strong>서비스 정책서와 IA를 통해 커뮤니케이션 용어와 플로우를 먼저 정리</strong>하는 것이 프로젝트 전체를 원활하게 진행시킨 핵심이었다고 생각합니다.
-      </p>
-      <p>
-        문서로 기준을 먼저 세우고 나서야 지도 기반 관제 화면처럼 복잡한 정보를 다루는 화면도 이해관계자 모두가 같은 그림을 보고 논의할 수 있었습니다.
-      </p>
+      <p>기획 단계에서 담당자 인터뷰를 통해 서비스 플로우를 설계하고 UX 시나리오 및 인터랙션을 정의하여 기획했습니다.</p>
+      <p><strong>개발 이후 QA 과정에서 기획적으로 비어있던 부분에 대한 리뷰</strong>가 이루어졌고, 이 경험이 이후 기획 작업에 실질적인 도움이 되었습니다.</p>
     </div>
   </div>
 
@@ -533,19 +528,19 @@ nav {
 
 <div style="padding: 1.5rem 4rem; border-top: 1px solid var(--border); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem;">
   <p style="font-size: 0.7rem; color: var(--border); line-height: 1.6;">
-    * 본 자료는 포트폴리오 목적으로 개인 기여 범위와 작업 프로세스만을 요약해 공개했습니다. 클라이언트사(코나아이)의 내부 기획 문서·계약 정보는 포함하지 않았습니다.
+    * 본 자료는 포트폴리오 목적으로 개인 기여 범위와 작업 프로세스만을 요약해 공개했습니다. 클라이언트사(안전명장)의 내부 기획 문서·화면 사양은 포함하지 않았습니다. 앱은 내부 고객용으로 운영됩니다.
   </p>
   <a href="mailto:chaejenn@gmail.com" style="font-size:0.7rem; color:var(--border); text-decoration:none; white-space:nowrap;">chaejenn@gmail.com</a>
 </div>
 
 <div class="case-nav">
-  <a href="newjeans-ditto.html" class="case-nav-item">
+  <a href="gas-ami.html" class="case-nav-item">
     <span class="case-nav-dir">← 이전 케이스</span>
-    <span class="case-nav-name">NewJeans – ditto 홈페이지</span>
+    <span class="case-nav-name">가스 AMI 시스템 기획</span>
   </a>
-  <a href="safety-master.html" class="case-nav-item" style="text-align:right">
+  <a href="source-music.html" class="case-nav-item" style="text-align:right">
     <span class="case-nav-dir">다음 케이스 →</span>
-    <span class="case-nav-name">안전명장 모바일 앱 개발</span>
+    <span class="case-nav-name">쏘스뮤직 · 르세라핌 홈페이지</span>
   </a>
 </div>
 
